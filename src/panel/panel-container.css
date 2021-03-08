@@ -1,0 +1,19 @@
+.panel .leftPanel{
+    background: darkgreen;
+    width: 350px;
+    height: 200px;
+    float: left;
+}
+
+.panel .centerPanel{
+    float: left;
+    margin-left: 200px;
+}
+
+.panel .rightPanel{
+    background: darkslateblue;
+    width: 350px;
+    height: 200px;
+    float: right;
+    margin-left: 200px;
+}
