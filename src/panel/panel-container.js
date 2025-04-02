@@ -1,102 +1,82 @@
-import React from 'react';
-import {Button} from "react-bootstrap";
-import './panel-container.css';
-import * as API_USERS from './api/panel-api';
-import {connect} from "react-redux";
+import React from "react";
+import { Button } from "react-bootstrap";
+import "./panel-container.css";
+import * as API_USERS from "./api/panel-api";
+import { connect } from "react-redux";
 
-class PanelContainer extends React.Component{
+class PanelContainer extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      selected: false,
+      collapseForm: false,
+      tableData: [],
+      isLoaded: false,
+      errorStatus: 0,
+      error: null,
+      msj: "",
+    };
+  }
 
-        this.state = {
-            selected: false,
-            collapseForm: false,
-            tableData: [],
-            isLoaded: false,
-            errorStatus: 0,
-            error: null,
-            msj: ''
-        };
-    }
+  componentWillReceiveProps(newProps) {
+    console.log(newProps.token);
+    this.fetchUser(newProps.token);
+  }
 
-    componentWillReceiveProps(newProps) {
-        console.log(newProps.token)
-        this.fetchUser(newProps.token)
-    }
-
-    fetchUser(tok){
-        return API_USERS.getUser(tok,(result, status, err) => {
-
-            if (result !== null && status === 200) {
-                this.setState({
-                    tableData: result,
-                    isLoaded: true
-                });
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
-            }
+  fetchUser(tok) {
+    return API_USERS.getUser(tok, (result, status, err) => {
+      if (result !== null && status === 200) {
+        this.setState({
+          tableData: result,
+          isLoaded: true,
         });
-    }
+      } else {
+        this.setState({
+          errorStatus: status,
+          error: err,
+        });
+      }
+    });
+  }
 
-    render(){
-        let tabData = this.state.tableData
-        let gr = tabData.map((value,index)=> {
-                    if(index === 0){
-                        return value.groups[0]
-                    }
-                }
-                )
+  render() {
+    let tabData = this.state.tableData;
+    let gr = tabData.map((value, index) => {
+      if (index === 0) {
+        return value.groups[0];
+      }
+    });
 
-        return(
-            <div className={'panel'}>
-
-                {gr[0] === 2 ? <></> :
-                    <Button className={'leftPanel'} href={'/panel/floor1'}>Floor 1</Button>
-                }
-                <div className={'centerPanel'}><h2>Welcome to control panel</h2></div>
-                {gr[0] === 1 ? <></> :
-                    <Button className={'rightPanel'} href={'/panel/floor2'}>Floor 2</Button>
-                }
-                <br/>
-
-
-                {/*{tabData.map((value,index)=> {*/}
-                {/*    if(index === 0){*/}
-                {/*        if(value.groups[0] === 3){*/}
-                {/*            console.log('admin')*/}
-                {/*        }else if (value.groups[0] === 2){*/}
-                {/*            console.log('groups2')*/}
-                {/*        }else if(value.groups[0] === 1)*/}
-                {/*            console.log('groups1')*/}
-                {/*    }*/}
-                {/*}*/}
-                {/*)}*/}
-
-                {/*{tabData.map((value,index)=> {*/}
-                {/*    if(index === 0){*/}
-                {/*        return value.groups[0]*/}
-                {/*    }*/}
-                {/*}*/}
-                {/*)}*/}
-
-                {/*{console.log(gr[0])}*/}
-
-
-            </div>
-
-        );
-    }
+    return (
+      <div className={"panel"}>
+        {gr[0] === 2 ? (
+          <></>
+        ) : (
+          <Button className={"leftPanel"} href={"/panel/floor1"}>
+            Floor 1
+          </Button>
+        )}
+        <div className={"centerPanel"}>
+          <h2>Welcome to control panel</h2>
+        </div>
+        {gr[0] === 1 ? (
+          <></>
+        ) : (
+          <Button className={"rightPanel"} href={"/panel/floor2"}>
+            Floor 2
+          </Button>
+        )}
+        <br />
+      </div>
+    );
+  }
 }
 
-const mapStateToProps = state => {
-    return {
-        token: state.token
-    }
-
-}
+const mapStateToProps = (state) => {
+  return {
+    token: state.token,
+  };
+};
 
 export default connect(mapStateToProps)(PanelContainer);
